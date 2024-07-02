@@ -1,13 +1,12 @@
 // Snake Game, Copyright Yaroslav Tsiapkalo. All Rights Reserved
 
-
 #include "Framework/SG_GameMode.h"
 #include "SnakeGame/Core/Types.h"
 #include "SnakeGame/Core/Grid.h"
 #include "World/SG_Grid.h"
 #include "Framework/SG_Pawn.h"
 
-void ASG_GameMode::StartPlay() 
+void ASG_GameMode::StartPlay()
 {
     Super::StartPlay();
 

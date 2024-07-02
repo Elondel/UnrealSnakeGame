@@ -12,10 +12,10 @@ class UCameraComponent;
 UCLASS()
 class SNAKEGAME_API ASG_Pawn : public APawn
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	ASG_Pawn();
+    ASG_Pawn();
 
     /**
      * Update pawn height fitting grid in viewport
@@ -28,7 +28,7 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere)
     USceneComponent* Origin;
-    
+
     UPROPERTY(VisibleAnywhere)
     UCameraComponent* Camera;
 
@@ -38,5 +38,4 @@ private:
     FTransform GridOrigin;
 
     void OnViewportResized(FViewport* Viewport, uint32 Val);
-
 };

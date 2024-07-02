@@ -1,6 +1,5 @@
 // Snake Game, Copyright Yaroslav Tsiapkalo. All Rights Reserved
 
-
 #include "Core/Grid.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All)

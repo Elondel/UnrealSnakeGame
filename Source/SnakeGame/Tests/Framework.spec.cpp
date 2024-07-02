@@ -15,25 +15,27 @@ END_DEFINE_SPEC(FSnakeFramework)
 
 void FSnakeFramework::Define()
 {
-	using namespace LifeExe::Test;
+    using namespace LifeExe::Test;
 
-	Describe("Framework", [this]()
-		{
-			BeforeEach([this]() 
-				{
-					AutomationOpenMap("GameLevel");
+    Describe("Framework",
+        [this]()
+        {
+            BeforeEach(
+                [this]()
+                {
+                    AutomationOpenMap("GameLevel");
                     World = GetTestGameWorld();
+                });
 
-				});
-
-			It("GameMapMightExist", [this]() { TestNotNull("World Exists", World); });
-            It("ClassesMightBeSetupCorrectly", [this]()
-				{
+            It("GameMapMightExist", [this]() { TestNotNull("World Exists", World); });
+            It("ClassesMightBeSetupCorrectly",
+                [this]()
+                {
                     TestNotNull("Snake game mode set up", Cast<ASG_GameMode>(World->GetAuthGameMode()));
                     TestNotNull("Snake pawn set up", Cast<ASG_Pawn>(World->GetFirstPlayerController()->GetPawn()));
                 });
             xIt("PawnLocationShouldBeAdjustCorrectly", [this]() { unimplemented(); });
-		});
+        });
 }
 
 #endif

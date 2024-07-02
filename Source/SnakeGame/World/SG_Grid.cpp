@@ -1,6 +1,5 @@
 // Snake Game, Copyright Yaroslav Tsiapkalo. All Rights Reserved
 
-
 #include "World/SG_Grid.h"
 #include "Core/Grid.h"
 #include "DrawDebugHelpers.h"
@@ -38,8 +37,7 @@ void ASG_Grid::Tick(float DeltaTime)
     DrawGrid();
 }
 
-
-void ASG_Grid::DrawGrid() 
+void ASG_Grid::DrawGrid()
 {
     if (!GetWorld() || !GetWorld()->LineBatcher)
     {
@@ -49,15 +47,15 @@ void ASG_Grid::DrawGrid()
     for (uint32 i{0}; i < GridDim.height + 1; i++)
     {
         const FVector StartLocation = GetActorLocation() + GetActorForwardVector() * CellSize * i;
-        //DrawDebugLine(GetWorld(), StartLocation, StartLocation + GetActorRightVector() * WorldWidth, FColor::Red, false, -1.0f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), StartLocation, StartLocation + GetActorRightVector() * WorldWidth, FColor::Red, false, -1.0f, 0, 2.0f);
         GetWorld()->LineBatcher->DrawLine(StartLocation, StartLocation + GetActorRightVector() * WorldWidth, FLinearColor::Red, 0, 2.0f);
     }
 
     for (uint32 i{0}; i < GridDim.width + 1; i++)
     {
         const FVector StartLocation = GetActorLocation() + GetActorRightVector() * CellSize * i;
-        //DrawDebugLine(GetWorld(), StartLocation, StartLocation + GetActorForwardVector() * WorldHeight, FColor::Red, false, -1.0f, 0, 2.0f);
+        // DrawDebugLine(GetWorld(), StartLocation, StartLocation + GetActorForwardVector() * WorldHeight, FColor::Red, false, -1.0f,
+        // 0, 2.0f);
         GetWorld()->LineBatcher->DrawLine(StartLocation, StartLocation + GetActorForwardVector() * WorldHeight, FLinearColor::Red, 0, 2.0f);
     }
 }
-

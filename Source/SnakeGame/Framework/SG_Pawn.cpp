@@ -1,25 +1,24 @@
 // Snake Game, Copyright Yaroslav Tsiapkalo. All Rights Reserved
 
-
 #include "Framework/SG_Pawn.h"
 #include "Camera/CameraComponent.h"
 
 namespace
 {
-    double HalfFOVTan(double FOVDegrees)
-    {
-        return FMath::Tan(FMath::DegreesToRadians(FOVDegrees * 0.5));
-    }
-
-    double VerticalFOV(double HFOVDegrees, double ViewportAspectHW)
-    {
-        return FMath::RadiansToDegrees(2.0 * FMath::Atan(FMath::Tan(FMath::DegreesToRadians(HFOVDegrees) * 0.5) * ViewportAspectHW));
-    }
+double HalfFOVTan(double FOVDegrees)
+{
+    return FMath::Tan(FMath::DegreesToRadians(FOVDegrees * 0.5));
 }
+
+double VerticalFOV(double HFOVDegrees, double ViewportAspectHW)
+{
+    return FMath::RadiansToDegrees(2.0 * FMath::Atan(FMath::Tan(FMath::DegreesToRadians(HFOVDegrees) * 0.5) * ViewportAspectHW));
+}
+}  // namespace
 
 ASG_Pawn::ASG_Pawn()
 {
-	PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = false;
 
     Origin = CreateDefaultSubobject<USceneComponent>("Origin");
     check(Origin);
@@ -49,7 +48,7 @@ void ASG_Pawn::UpdateLocation(const Snake::Dim& InDim, uint32 InCellSize, const 
 #endif
 }
 
-void ASG_Pawn::OnViewportResized(FViewport* Viewport, uint32 Val) 
+void ASG_Pawn::OnViewportResized(FViewport* Viewport, uint32 Val)
 {
     if (!Viewport || Viewport->GetSizeXY().Y == 0 || Dim.height == 0)
     {
@@ -74,7 +73,6 @@ void ASG_Pawn::OnViewportResized(FViewport* Viewport, uint32 Val)
         const double VFOV = VerticalFOV(HFOV, 1.0 / ViewportAspect);
         LocationZ = WorldHeight / HalfFOVTan(VFOV);
     }
-
 
     const FVector NewPawnLocation = GridOrigin.GetLocation() + 0.5 * FVector(WorldHeight, WorldWidth, LocationZ);
     SetActorLocation(NewPawnLocation);

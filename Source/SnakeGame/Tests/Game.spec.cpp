@@ -6,20 +6,22 @@
 #include "Misc/AutomationTest.h"
 #include "Core/Game.h"
 
-DEFINE_SPEC(FSnakeGame, "Snake", EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
+DEFINE_SPEC(FSnakeGame, "Snake",
+    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
 
 void FSnakeGame::Define()
 {
-	using namespace Snake;
+    using namespace Snake;
 
-	Describe("CoreGame", [this]() {//
-		It("GridShouldExist", [this]()
-			{ 
-				const Settings GS{10, 10};
+    Describe("CoreGame", [this]() {  //
+        It("GridShouldExist",
+            [this]()
+            {
+                const Settings GS{10, 10};
                 const auto CoreGame = Game(GS);
                 TestTrueExpr(CoreGame.grid().IsValid());
-			});
-		});
+            });
+    });
 }
 
 #endif
