@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Types.h"
 
-
 namespace Snake
 {
 

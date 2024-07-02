@@ -28,4 +28,4 @@ private:
     FORCEINLINE uint32 posToIndex(uint32 x, uint32 y) const;
 };
 
-}  // namespace SnakeGame
+}  // namespace Snake

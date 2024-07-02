@@ -6,13 +6,14 @@
 #include "Misc/AutomationTest.h"
 #include "Core/Grid.h"
 
-DEFINE_SPEC(FSnakeGrid, "Snake", EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
+DEFINE_SPEC(FSnakeGrid, "Snake",
+    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority)
 
 void FSnakeGrid::Define()
 {
-	using namespace Snake;
+    using namespace Snake;
 
-	Describe("CoreGrid", [this]() {  //
+    Describe("CoreGrid", [this]() {  //
         It("DimsMightIncludeWalls",
             [this]()
             {

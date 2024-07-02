@@ -1,6 +1,5 @@
 // Snake Game, Copyright Yaroslav Tsiapkalo. All Rights Reserved
 
-
 #include "Core/Game.h"
 #include "Core/Grid.h"
 
