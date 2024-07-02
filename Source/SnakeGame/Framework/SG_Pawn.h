@@ -17,7 +17,13 @@ class SNAKEGAME_API ASG_Pawn : public APawn
 public:
 	ASG_Pawn();
 
-    void UpdateLocation(const Snake::Dim& InDim, uint32 InCellSize, const FTransform& InGridOrigin);
+    /**
+     * Update pawn height fitting grid in viewport
+     * @param InDim  grid dimensions
+     * @param InCellSize  world size of cell
+     * @param InGridOigin  world trasformation of the grid
+     */
+    void UpdateLocation(const Snake::Dim& Dim, uint32 CellSize, const FTransform& GridOrigin);
 
 protected:
     UPROPERTY(VisibleAnywhere)

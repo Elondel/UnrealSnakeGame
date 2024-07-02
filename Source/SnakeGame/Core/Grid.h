@@ -13,6 +13,10 @@ class Grid
 public:
     Grid(const Dim& dim);
 
+    /**
+     * Return grid dimensions including walls (width + 2, height + 2)
+     * @return Dim  grid deimensions
+     */
     Dim dim() const { return c_dim; }
 
 private:
