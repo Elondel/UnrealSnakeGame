@@ -36,6 +36,7 @@ private:
     Snake::Dim Dim;
     uint32 CellSize;
     FTransform GridOrigin;
+    FDelegateHandle ResizeHandle;
 
     void OnViewportResized(FViewport* Viewport, uint32 Val);
 };
