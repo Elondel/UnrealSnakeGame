@@ -41,7 +41,7 @@ private:
     UFUNCTION(Exec, Category = "Console command")
     void NextColor();
 
-    TUniquePtr<Snake::Game> CoreGame;
+    TUniquePtr<SnakeGame::Game> CoreGame;
     uint32 ColorTableIndex{0};
 
     void FindFog();

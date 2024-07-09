@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Types.h"
 
-namespace Snake
+namespace SnakeGame
 {
 
 class Grid;
@@ -26,4 +26,4 @@ private:
     TSharedPtr<Grid> m_grid;
 };
 
-}  // namespace Snake
+}  // namespace SnakeGame

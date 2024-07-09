@@ -15,8 +15,8 @@ void ASG_GameMode::StartPlay()
     Super::StartPlay();
 
     // init core game
-    const Snake::Settings GS{gridDims.X, gridDims.Y};
-    CoreGame = MakeUnique<Snake::Game>(GS);
+    const SnakeGame::Settings GS{gridDims.X, gridDims.Y};
+    CoreGame = MakeUnique<SnakeGame::Game>(GS);
     check(CoreGame.IsValid());
 
     // init world grid
@@ -76,7 +76,7 @@ void ASG_GameMode::UpdateColors()
         // update grid
         GridVisual->UpdateColors(*ColorSet);
 
-        // update scene amboient color via fog
+        // update scene ambient color via fog
         if (Fog && Fog->GetComponent())
         {
             Fog->GetComponent()->SkyAtmosphereAmbientContributionColorScale = ColorSet->SkyAtmosphereColor;
