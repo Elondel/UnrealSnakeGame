@@ -4,19 +4,26 @@
 #include "SnakeGame/Core/Types.h"
 #include "SnakeGame/Core/Grid.h"
 #include "World/SG_Grid.h"
+#include "World/SG_Snake.h"
 #include "World/SG_WorldTypes.h"
 #include "Framework/SG_Pawn.h"
 #include "Engine/ExponentialHeightFog.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+
+ASG_GameMode::ASG_GameMode()
+{
+    PrimaryActorTick.bCanEverTick = true;
+}
 
 void ASG_GameMode::StartPlay()
 {
     Super::StartPlay();
 
     // init core game
-    const SnakeGame::Settings GS{gridDims.X, gridDims.Y};
-    CoreGame = MakeUnique<SnakeGame::Game>(GS);
+    CoreGame = MakeUnique<SnakeGame::Game>(MakeSettings());
     check(CoreGame.IsValid());
 
     // init world grid
@@ -26,6 +33,11 @@ void ASG_GameMode::StartPlay()
     check(GridVisual);
     GridVisual->SetModel(CoreGame->grid(), CellSize);
     GridVisual->FinishSpawning(GridOrigin);
+
+    // init world snake
+    SnakeVisual = GetWorld()->SpawnActorDeferred<ASG_Snake>(SnakeVisualClass, GridOrigin);
+    SnakeVisual->SetModel(CoreGame->snake(), CellSize, CoreGame->grid()->dim());
+    SnakeVisual->FinishSpawning(GridOrigin);
 
     // set pawn location fitting grid in viewport
     APlayerController* PC = GetWorld()->GetFirstPlayerController();
@@ -45,6 +57,9 @@ void ASG_GameMode::StartPlay()
     check(RowsCount > 0);
     ColorTableIndex = FMath::RandRange(0, RowsCount - 1);
     UpdateColors();
+
+    //
+    SetupInput();
 }
 
 void ASG_GameMode::NextColor()
@@ -76,6 +91,9 @@ void ASG_GameMode::UpdateColors()
         // update grid
         GridVisual->UpdateColors(*ColorSet);
 
+        // update snake
+        SnakeVisual->UpdateColors(*ColorSet);
+
         // update scene ambient color via fog
         if (Fog && Fog->GetComponent())
         {
@@ -83,4 +101,86 @@ void ASG_GameMode::UpdateColors()
             Fog->MarkComponentsRenderStateDirty();
         }
     }
+}
+
+void ASG_GameMode::SetupInput()
+{
+    if (!GetWorld())
+    {
+        return;
+    }
+
+    if (APlayerController* PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController()))
+    {
+        if (UEnhancedInputLocalPlayerSubsystem* InputSystem =
+                ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
+        {
+            InputSystem->AddMappingContext(InputMapping, 0);
+        }
+
+        UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PC->InputComponent);
+        check(Input);
+        Input->BindAction(MoveFowrwardInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveForward);
+        Input->BindAction(MoveRightInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveRight);
+        Input->BindAction(ResetGameInputAction, ETriggerEvent::Started, this, &ThisClass::OnGameReset);
+    }
+}
+
+void ASG_GameMode::OnMoveForward(const FInputActionValue& Value)
+{
+    const float InputValue = Value.Get<float>();
+
+    if (InputValue == 0.0f)
+    {
+        return;
+    }
+
+    SnakeInput = SnakeGame::Input(0, InputValue);
+}
+
+void ASG_GameMode::OnMoveRight(const FInputActionValue& Value)
+{
+    const float InputValue = Value.Get<float>();
+
+    if (InputValue == 0.0f)
+    {
+        return;
+    }
+
+    SnakeInput = SnakeGame::Input(InputValue, 0);
+}
+
+void ASG_GameMode::OnGameReset(const FInputActionValue& Value)
+{
+    const bool InputValue = Value.Get<bool>();
+    if (InputValue)
+    {
+        CoreGame.Reset(new SnakeGame::Game(MakeSettings()));
+        check(CoreGame.IsValid());
+        GridVisual->SetModel(CoreGame->grid(), CellSize);
+        SnakeVisual->SetModel(CoreGame->snake(), CellSize, CoreGame->grid()->dim());
+        SnakeInput = SnakeGame::Input{1, 0};
+        NextColor();
+    }
+}
+
+void ASG_GameMode::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+
+    if (CoreGame.IsValid())
+    {
+        CoreGame->update(DeltaSeconds, SnakeInput);
+    }
+}
+
+SnakeGame::Settings ASG_GameMode::MakeSettings() const
+{
+    SnakeGame::Settings GS;
+    GS.gridDims = SnakeGame::Dim{gridDims.X, gridDims.Y};
+    GS.gameSpeed = GameSpeed;
+    GS.snake.defaultSize = SnakeDefaultSize;
+    GS.snake.startPosition = SnakeGame::Position{gridDims.X / 2 + 1, gridDims.Y / 2 + 1};
+
+    return GS;
 }
