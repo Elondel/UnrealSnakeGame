@@ -33,7 +33,7 @@ ASG_Pawn::ASG_Pawn()
     Camera->AddRelativeRotation(FRotator(-90.0, 0.0, 0.0));
 }
 
-void ASG_Pawn::UpdateLocation(const Snake::Dim& InDim, uint32 InCellSize, const FTransform& InGridOrigin)
+void ASG_Pawn::UpdateLocation(const SnakeGame::Dim& InDim, uint32 InCellSize, const FTransform& InGridOrigin)
 {
     Dim = InDim;
     CellSize = InCellSize;
